@@ -28,11 +28,11 @@
 {#                    {% include 'search.html' %}#}
 {#                </div>#}
 
-                {% if user.is_authenticated %}
+{#                {% if user.is_authenticated %}#}
                     <div class="d-flex">
                         <div>
                             <li class="list-unstyled pe-3">
-                                <a href=""><i
+                                <a href="{% url 'photo_create' %}"><i
                                         class="bi bi-plus-lg fs-5 text-dark"></i></a>
                             </li>
                         </div>
@@ -51,7 +51,7 @@
                             </li>
                         </div>
 
-                        {% else %}
+{#                        {% else %}#}
                         <div class="d-flex">
                             <li class="list-unstyled"><a href="" class="btn btn-primary">Войти</a></li>
                             <li class="list-unstyled">
@@ -62,7 +62,7 @@
                         </div>
                     </div>
 
-                {% endif %}
+{#                {% endif %}#}
             </div>
         </nav>
     </header>
