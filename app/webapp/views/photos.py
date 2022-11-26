@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, get_object_or_404
-from django.urls import reverse
-from django.views.generic import CreateView, DetailView, UpdateView, ListView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import CreateView, DetailView, UpdateView, ListView, DeleteView
 
 from webapp.forms.photos import PhotosForm
 from webapp.models import Photos
@@ -12,19 +12,26 @@ class PhotoView(DetailView):
     model = Photos
     context_object_name = 'photo'
 
-    # def get(self, request, *args, **kwargs):
-    #     favorite = request.GET.get('favorite')
-    #     if favorite:
-    #         request.user.favorites.add(favorite)
-    #     return super().get(request, *args, **kwargs)
+    def get(self, request, *args, **kwargs):
+        favorite = request.GET.get('favorite')
+        if favorite:
+            request.user.favorites.add(favorite)
+        not_favorite = request.GET.get('not_favorite')
+        if not_favorite:
+            request.user.favorites.remove(not_favorite)
+        return super().get(request, *args, **kwargs)
 
 
 class PhotosView(ListView):
     template_name = '../templates/index.html'
     model = Photos
+    context_object_name = 'photos'
+
+    def get_queryset(self):
+        return super(PhotosView, self).get_queryset().order_by('-created_at')
 
 
-class PostCreateView(CreateView):
+class PhotoCreateView(CreateView):
     template_name = 'photo_create.html'
     form_class = PhotosForm
     model = Photos
@@ -41,7 +48,7 @@ class PostCreateView(CreateView):
         return self.render_to_response(context)
 
 
-class PostUpdateView(UpdateView):
+class PhotoUpdateView(UpdateView):
     template_name = 'photo_update.html'
     form_class = PhotosForm
     model = Photos
@@ -52,3 +59,10 @@ class PostUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse('index')
+
+
+class PhotoDeleteView(DeleteView):
+    template_name = 'delete_photo.html'
+    model = Photos
+    context_object_name = 'photo'
+    success_url = reverse_lazy('index')

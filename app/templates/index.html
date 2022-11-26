@@ -2,20 +2,9 @@
 {% load django_bootstrap5 %}
 
 {% block content %}
-
-    <div class="d-flex flex-row flex-wrap" style="padding-left: 145px;">
-        {% for photo in photos %}
-
-            <div class="m-3">
-                <a href="">
-                    <img src="{{ photo.image.url }}" width="293"
-                         height="293" alt="user picture">
-                </a>
-            </div>
-
-        {% empty %}
-        {% endfor %}
-    </div>
+    {% if user.is_authenticated %}
+        {% include 'photos.html' %}
+    {% endif %}
 {% endblock %}
 
 
