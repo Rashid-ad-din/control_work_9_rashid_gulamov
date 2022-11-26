@@ -15,9 +15,7 @@
                 <div class="border" style="width: 650px;">
                     <img src="{{ photo.image.url }}" width="650" height="450" alt="post picture">
                 </div>
-                <div id="js">
-
-                </div>
+                <div id="js" class="p-2"></div>
                 <div class="p-2 d-flex">
                     {% if photo.author != user and photo not in user.favorites.all %}
                         <form action="" method="get">
@@ -48,19 +46,54 @@
 {% block js %}
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"
             integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"
+            integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0=" crossorigin="anonymous"></script>
+
     {% if photo.author != user and photo not in user.favorites.all %}
         <script>
             window.addEventListener('load', function () {
-
-                let event = function ()
-
                 let js_div = document.getElementById('js');
-
                 let button = document.createElement('button');
+
                 js_div.appendChild(button);
                 button.setAttribute('class', 'btn btn-secondary')
+                button.setAttribute('id', 'active')
                 button.innerText = "Добавить в избранное";
 
+                let activate = $('#active')
+
+                let add = function (evt) {
+                    let url = 'http://localhost:8000/api/add/'
+
+                    let value = {{ photo.pk }};
+
+                    $.ajax({
+                        url: url,
+                        method: 'get',
+                        data: {
+                            "a": value
+                        },
+                        success: function (data, status) {
+                            console.log(data);
+                            console.log(status);
+                            button.remove()
+
+                            let button2 = document.createElement('button');
+
+                            js_div.appendChild(button2);
+                            button2.setAttribute('class', 'btn btn-secondary')
+                            button2.setAttribute('id', 'active')
+                            button2.innerText = "Удалить из избранного";
+                        },
+                        error: function (response, status) {
+                            console.log(status);
+                            console.log(response);
+                        }
+                    });
+                };
+
+                activate.on('click', add);
+                {#deactivate.on('click', remove);#}
             })
         </script>
     {% endif %}
