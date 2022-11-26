@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'webapp',
     'accounts',
+    'api',
     'django_bootstrap5',
 ]
 

@@ -1,8 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.forms import TextInput
 
 
 class LoginForm(forms.Form):
@@ -38,5 +36,3 @@ class CustomUserCreationForm(forms.ModelForm):
         if commit:
             user.save()
         return user
-
-

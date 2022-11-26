@@ -31,7 +31,7 @@ class PhotosView(ListView):
         return super(PhotosView, self).get_queryset().order_by('-created_at')
 
 
-class PhotoCreateView(CreateView):
+class PhotoCreateView(LoginRequiredMixin, CreateView):
     template_name = 'photo_create.html'
     form_class = PhotosForm
     model = Photos
@@ -48,7 +48,7 @@ class PhotoCreateView(CreateView):
         return self.render_to_response(context)
 
 
-class PhotoUpdateView(UpdateView):
+class PhotoUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'photo_update.html'
     form_class = PhotosForm
     model = Photos
@@ -61,7 +61,7 @@ class PhotoUpdateView(UpdateView):
         return reverse('index')
 
 
-class PhotoDeleteView(DeleteView):
+class PhotoDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'delete_photo.html'
     model = Photos
     context_object_name = 'photo'

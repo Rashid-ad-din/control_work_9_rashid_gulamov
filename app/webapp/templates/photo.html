@@ -6,11 +6,8 @@
 {% endblock %}
 
 {% block content %}
-
-
     <div style="padding-left: 300px;">
         <div class="d-flex flex-column">
-
             <div class="border d-flex flex-column" style="width: 653px;">
                 <div>
                     <h4 class="text-center">{{ photo.signature }}</h4>
@@ -18,22 +15,24 @@
                 <div class="border" style="width: 650px;">
                     <img src="{{ photo.image.url }}" width="650" height="450" alt="post picture">
                 </div>
+                <div id="js">
 
+                </div>
                 <div class="p-2 d-flex">
                     {% if photo.author != user and photo not in user.favorites.all %}
                         <form action="" method="get">
-                            <input type="hidden" name="favorite" value="{{ photo.pk }}">
+                            <input type="hidden" name="favorite" value="{{ photo.pk }}" id="favorite">
                             <input type="submit" value="Дабавить в избранное" class="btn btn-light">
                         </form>
                     {% endif %}
                     {% if photo.author != user and photo in user.favorites.all %}
                         <form action="" method="get">
-                            <input type="hidden" name="not_favorite" value="{{ photo.pk }}">
+                            <input type="hidden" name="not_favorite" value="{{ photo.pk }}" id="not_favorite">
                             <input type="submit" value="Убрать из избранных" class="btn btn-secondary">
                         </form>
                     {% endif %}
                 </div>
-                {% if photo.author == user %}
+                {% if photo.author == user or user.is_superuser %}
                     <div class="p-2">
                         <a href="{% url 'photo_update' photo.pk %}" class="btn btn-secondary">Изменить</a>
                     </div>
@@ -42,9 +41,27 @@
                     </div>
                 {% endif %}
             </div>
-
         </div>
-
-
     </div>
+{% endblock %}
+
+{% block js %}
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+            integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    {% if photo.author != user and photo not in user.favorites.all %}
+        <script>
+            window.addEventListener('load', function () {
+
+                let event = function ()
+
+                let js_div = document.getElementById('js');
+
+                let button = document.createElement('button');
+                js_div.appendChild(button);
+                button.setAttribute('class', 'btn btn-secondary')
+                button.innerText = "Добавить в избранное";
+
+            })
+        </script>
+    {% endif %}
 {% endblock %}

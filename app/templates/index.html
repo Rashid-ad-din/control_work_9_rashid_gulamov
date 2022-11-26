@@ -2,9 +2,7 @@
 {% load django_bootstrap5 %}
 
 {% block content %}
-    {% if user.is_authenticated %}
-        {% include 'photos.html' %}
-    {% endif %}
+    {% include 'photos.html' %}
 {% endblock %}
 
 

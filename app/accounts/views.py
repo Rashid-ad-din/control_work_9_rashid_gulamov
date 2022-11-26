@@ -23,8 +23,9 @@ class LoginView(TemplateView):
             return redirect('login')
         login_name = form.cleaned_data.get('username')
         password = form.cleaned_data.get('password')
+        print(login_name, password)
         next = form.cleaned_data.get('next')
-        user = authenticate(request, login=login_name, password=password)
+        user = authenticate(request, username=login_name, password=password)
         if not user:
             return redirect('login')
         login(request, user)
@@ -47,8 +48,7 @@ class RegisterView(CreateView):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.save()
+            user = form.save()
             login(request, user)
             return redirect('index')
         context = {}
